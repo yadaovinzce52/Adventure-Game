@@ -54,7 +54,7 @@ public class Game {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.getContentPane().setBackground(Color.black);
 		window.setLayout(null);
-		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		// window.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		con = window.getContentPane();
 		
 		titleNamePanel = new JPanel();
@@ -162,13 +162,45 @@ public class Game {
 		playerPanel.setLayout(new GridLayout(1,4));
 		con.add(playerPanel);
 		
+		hpLabel = new JLabel("HP:");
+		hpLabel.setFont(normalFont);
+		hpLabel.setForeground(Color.white);
+		playerPanel.add(hpLabel);
+		
+		hpLabelNumber = new JLabel();
+		hpLabelNumber.setFont(normalFont);
+		hpLabelNumber.setForeground(Color.white);
+		playerPanel.add(hpLabelNumber);
+		
+		itemLabel = new JLabel("Item:");
+		itemLabel.setFont(normalFont);
+		itemLabel.setForeground(Color.white);
+		itemLabel.setBackground(Color.red);
+		playerPanel.add(itemLabel);
+		
+		itemLabelName = new JLabel();
+		itemLabelName.setFont(normalFont);
+		itemLabelName.setForeground(Color.white);
+		playerPanel.add(itemLabelName);
+		
+		hungerLabel = new JLabel("Hunger");
+		hungerLabel.setFont(normalFont);
+		hungerLabel.setForeground(Color.white);
+		hungerLabel.setBackground(Color.red);
+		playerPanel.add(hungerLabel);
+		
+		hungerLabelNumber = new JLabel();
+		hungerLabelNumber.setForeground(Color.white);
+		hungerLabelNumber.setFont(normalFont);
+		playerPanel.add(hungerLabelNumber);
+		
 		playerSetup();
 	}
 	
 	public void playerSetup() {
 		playerHunger = 15;
 		playerHP = 25;
-		item = "";
+		item = "empty";
 		itemLabelName.setText(item);
 		hpLabelNumber.setText("" + playerHP);
 		hungerLabelNumber.setText("" + playerHunger);
@@ -179,7 +211,8 @@ public class Game {
 	public void forest() {
 		position = "forest";
 		mainTextArea.setText("You wake up in the middle of the forest and look around.\n"
-				+ "You see your plane, a river, and a path. You get up, what do you do?");
+				+ "You see your plane, a river, and a path.\n"
+				+ "You get up, what do you do?");
 		choice1.setText("Search the plane");
 		choice2.setText("Go towards the river");
 		choice3.setText("Follow the path");

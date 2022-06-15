@@ -9,13 +9,14 @@ public class Game {
 	JFrame window;
 	Container con;
 	JPanel titleNamePanel, startButtonPanel, descriptionPanel, mainTextPanel, choiceButtonPanel, playerPanel;
-	JLabel titleNameLabel, descriptionLabel, backgroundLabel, hungerLabel, hungerLabelNumber, hpLabel, hpLabelNumber, itemLabel, itemLabelName;
+	JLabel titleNameLabel, descriptionLabel, backgroundLabel, hpLabel, hpLabelNumber, itemLabel, itemLabelName;
 	Font titleFont = new Font("Times New Roman", Font.ITALIC, 100);
 	Font descriptionFont = new Font("Times New Roman", Font.PLAIN, 50);
 	Font buttonFont = new Font("Times New Roman", Font.PLAIN, 50);
 	Font normalFont = new Font("Times New Roman", Font.PLAIN, 25);
 	JButton startButton, choice1, choice2, choice3, choice4;
 	JTextArea mainTextArea;
+	Boolean tookMed, tookFood;
 	String position, item;
 	int playerHunger, playerHP;
 	
@@ -100,12 +101,12 @@ public class Game {
 		descriptionPanel.setVisible(false);
 		
 		mainTextPanel = new JPanel();
-		mainTextPanel.setBounds(400, 100, 1600, 400);
+		mainTextPanel.setBounds(650, 200, 800, 200);
 		mainTextPanel.setBackground(Color.black);
 		con.add(mainTextPanel);
 		
 		mainTextArea = new JTextArea();
-		mainTextArea.setBounds(400, 100, 1600, 400);
+		mainTextArea.setBounds(650, 200, 800, 200);
 		mainTextArea.setBackground(Color.black);
 		mainTextArea.setForeground(Color.white);
 		mainTextArea.setFont(normalFont);
@@ -115,9 +116,9 @@ public class Game {
 		mainTextPanel.add(mainTextArea);
 		
 		choiceButtonPanel = new JPanel();
-		choiceButtonPanel.setBounds(800, 700, 400, 200);
-		choiceButtonPanel.setBackground(Color.blue);
-		choiceButtonPanel.setLayout(new GridLayout(4,2));
+		choiceButtonPanel.setBounds(650, 700, 700, 200);
+		choiceButtonPanel.setBackground(Color.black);
+		choiceButtonPanel.setLayout(new GridLayout(4,1));
 		con.add(choiceButtonPanel);
 		
 		choice1 = new JButton("Choice 1");
@@ -133,32 +134,32 @@ public class Game {
 		choice2.setBackground(Color.black);
 		choice2.setForeground(Color.white);
 		choice2.setFont(normalFont);
-		choice1.setFocusPainted(false);
-		choice1.addActionListener(choiceHandler);
-		choice1.setActionCommand("c2");
+		choice2.setFocusPainted(false);
+		choice2.addActionListener(choiceHandler);
+		choice2.setActionCommand("c2");
 		choiceButtonPanel.add(choice2);
 		
 		choice3 = new JButton("Choice 3");
 		choice3.setBackground(Color.black);
 		choice3.setForeground(Color.white);
 		choice3.setFont(normalFont);
-		choice1.setFocusPainted(false);
-		choice1.addActionListener(choiceHandler);
-		choice1.setActionCommand("c3");
+		choice3.setFocusPainted(false);
+		choice3.addActionListener(choiceHandler);
+		choice3.setActionCommand("c3");
 		choiceButtonPanel.add(choice3);
 		
 		choice4 = new JButton("Choice 4");
 		choice4.setBackground(Color.black);
 		choice4.setForeground(Color.white);
 		choice4.setFont(normalFont);
-		choice1.setFocusPainted(false);
-		choice1.addActionListener(choiceHandler);
-		choice1.setActionCommand("c4");
+		choice4.setFocusPainted(false);
+		choice4.addActionListener(choiceHandler);
+		choice4.setActionCommand("c4");
 		choiceButtonPanel.add(choice4);
 		
 		playerPanel = new JPanel();
-		playerPanel.setBounds(400, 100, 600, 200);
-		playerPanel.setBackground(Color.blue);
+		playerPanel.setBounds(10, 10, 1000, 100);
+		playerPanel.setBackground(Color.black);
 		playerPanel.setLayout(new GridLayout(1,4));
 		con.add(playerPanel);
 		
@@ -183,35 +184,21 @@ public class Game {
 		itemLabelName.setForeground(Color.white);
 		playerPanel.add(itemLabelName);
 		
-		hungerLabel = new JLabel("Hunger");
-		hungerLabel.setFont(normalFont);
-		hungerLabel.setForeground(Color.white);
-		hungerLabel.setBackground(Color.red);
-		playerPanel.add(hungerLabel);
-		
-		hungerLabelNumber = new JLabel();
-		hungerLabelNumber.setForeground(Color.white);
-		hungerLabelNumber.setFont(normalFont);
-		playerPanel.add(hungerLabelNumber);
-		
 		playerSetup();
 	}
 	
 	public void playerSetup() {
-		playerHunger = 15;
 		playerHP = 25;
-		item = "empty";
+		item = "";
 		itemLabelName.setText(item);
 		hpLabelNumber.setText("" + playerHP);
-		hungerLabelNumber.setText("" + playerHunger);
 		
 		forest();
 	}
 	
 	public void forest() {
 		position = "forest";
-		mainTextArea.setText("You wake up in the middle of the forest and look around.\n"
-				+ "You see your plane, a river, and a path.\n"
+		mainTextArea.setText("You wake up in the middle of the forest and look around. Your phone is dead and you have nothing else with you except for the clothes on your back. You see your plane, a river, and a path.\n"
 				+ "You get up, what do you do?");
 		choice1.setText("Search the plane");
 		choice2.setText("Go towards the river");
@@ -221,15 +208,220 @@ public class Game {
 	
 	public void plane() {
 		position = "plane";
-		mainTextArea.setText("You search your plane to see what you can salvage. You find some medical supplies, some food and water, ");
+		mainTextArea.setText("You search your plane to see what you can salvage. You find some medical supplies and some food and water.\n"
+				+ "You can only carry one, which do you take?");
+		choice1.setText("Medical supplies & river");
+		choice2.setText("Medical supplies & path");
+		choice3.setText("Food and water & river");
+		choice4.setText("Food and water & path");
 	}
 	
 	public void river() {
 		position = "river";
+		itemLabelName.setText(item);
+		if (item == "") {
+			playerHP = 0;
+			hpLabelNumber.setText("" + playerHP);
+			mainTextArea.setText("You go towards the river but while walking you get bit by rattlesnake. Without any items with you, you cannot treat the bite and are unable to go any furhter.\n"
+					+ "GAME OVER\n"
+					+ "Exit Application to try again");
+			choice1.setText("");
+			choice2.setText("");
+			choice3.setText("");
+			choice4.setText("");
+			choice1.setVisible(false);
+			choice2.setVisible(false);
+			choice3.setVisible(false);
+			choice4.setVisible(false);
+			endGame();
+		} else if (item == "medical supplies") {
+			mainTextArea.setText("You go towards the river, which is full of contaminants making it unsafe for drinking. Fortunately, there is a small pile of wood that you can use to create a raft or a small fire.\n"
+					+ "What do you decide to do?");
+			choice1.setText("Create a raft");
+			choice2.setText("Create a fire");
+			choice3.setText("");
+			choice4.setText("");
+		} else if (item == "food and water") {
+			mainTextArea.setText("You go towards the river, which is full of contaminants making it unsafe for drinking. Fortunately, there is a small pile of wood that you can use to create a raft or a small fire.\n"
+					+ "What do you decide to do?");
+			choice1.setText("Create a raft");
+			choice2.setText("Create a fire");
+			choice3.setText("");
+			choice4.setText("");
+		}
+	}
+	
+	public void raft() {
+		if (item == "medical supplies") {
+			position = "raft";
+			playerHP += 15;
+			hpLabelNumber.setText("" + playerHP);
+			mainTextArea.setText("You were able to create a small raft but in the process you manage to cut yourself multiple times but beacuse you had medical supplies that was the least of your problems. You were able to ride the river down and end up in a small village. There you were able to get food and water and radio for help.\n"
+					+ "YOU SURVIVED!");
+			choice1.setText("");
+			choice2.setText("");
+			choice3.setText("");
+			choice4.setText("");
+			choice1.setVisible(false);
+			choice2.setVisible(false);
+			choice3.setVisible(false);
+			choice4.setVisible(false);
+			endGame();
+		} else if (item == "food and water") {
+			position = "raft";
+			playerHP = 0;
+			hpLabelNumber.setText("" + playerHP);
+			mainTextArea.setText("You were able to create a small raft but in the process you manage to cut yourself multiple times. Since you do not have any medical supplies you caught an infection and were not able to make it.\n"
+					+ "GAME OVER");
+			choice1.setText("");
+			choice2.setText("");
+			choice3.setText("");
+			choice4.setText("");
+			choice1.setVisible(false);
+			choice2.setVisible(false);
+			choice3.setVisible(false);
+			choice4.setVisible(false);
+			endGame();
+		}
+	}
+	
+	public void fire() {
+		if (item == "medical supplies") {
+			position = "fire";
+			playerHP = 0;
+			hpLabelNumber.setText("" + playerHP);
+			mainTextArea.setText("You create a small fire, but without a weapon to hunt and no other source for food and water, the fire was only able to keep you warm and alive for a few days.\n"
+					+ "GAME OVER");
+			choice1.setText("");
+			choice2.setText("");
+			choice3.setText("");
+			choice4.setText("");
+			choice1.setVisible(false);
+			choice2.setVisible(false);
+			choice3.setVisible(false);
+			choice4.setVisible(false);
+			endGame();
+		} else if (item == "food and water") {
+			position = "fire";
+			playerHP += 20;
+			hpLabelNumber.setText("" + playerHP);
+			mainTextArea.setText("You create a small fire and with your supply of food and water you were able to keep yourself alive until a group of hikers find you and lead you back to civilization.\n"
+					+ "YOU SURVIVED!");
+			choice1.setText("");
+			choice2.setText("");
+			choice3.setText("");
+			choice4.setText("");
+			choice1.setVisible(false);
+			choice2.setVisible(false);
+			choice3.setVisible(false);
+			choice4.setVisible(false);
+			endGame();
+		}
 	}
 	
 	public void path() {
 		position = "path";
+		itemLabelName.setText(item);
+		if (item == "") {
+			playerHP = 0;
+			hpLabelNumber.setText("" + playerHP);
+			mainTextArea.setText("You follow the path as it seems to lead to a village. After following it for hours you were attacked by a bear. You manage to escape but with no medical supplies you are unable to make it.\n"
+					+ "GAME OVER\n"
+					+ "Exit Application to try again");
+			choice1.setText("");
+			choice2.setText("");
+			choice3.setText("");
+			choice4.setText("");
+			choice1.setVisible(false);
+			choice2.setVisible(false);
+			choice3.setVisible(false);
+			choice4.setVisible(false);
+			endGame();
+		} else if (item == "medical supplies") {
+			mainTextArea.setText("You follow the path as it seems to lead to a village. After following it for hours you encounter a bear. You remember you have medical supplies so you have a chance to fight.\n"
+					+ "What do you decide to do?");
+			choice1.setText("Try to Escape");
+			choice2.setText("Fight the bear");
+			choice3.setText("");
+			choice4.setText("");
+		} else if (item == "food and water") {
+			mainTextArea.setText("You follow the path as it seems to lead to a village. After following it for hours you encounter a bear. You remember you have some food that may come in handy.\n"
+					+ "What do you decide to do?");
+			choice1.setText("Throw food and distract bear");
+			choice2.setText("Try to Escape");
+			choice3.setText("");
+			choice4.setText("");
+		}
+	}
+	
+	public void fight() {
+		position = "fight";
+		playerHP = 0;
+		hpLabelNumber.setText("" + playerHP);
+		mainTextArea.setText("You decide to try and fight the bear. The bear stands on its hind legs and manged to overthrow you. You did not make it.\n"
+				+ "GAME OVER");
+		choice1.setText("");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+		choice1.setVisible(false);
+		choice2.setVisible(false);
+		choice3.setVisible(false);
+		choice4.setVisible(false);
+		endGame();
+	}
+	
+	public void throwFood() {
+		position = "throw";
+		mainTextArea.setText("You decide to throw the food that you have away from you to distract the bear. It worked and you were able to slip past and high tail it to the closest village where they helped you radio for help.\n"
+				+ "YOU SURVIVED!");
+		choice1.setText("");
+		choice2.setText("");
+		choice3.setText("");
+		choice4.setText("");
+		choice1.setVisible(false);
+		choice2.setVisible(false);
+		choice3.setVisible(false);
+		choice4.setVisible(false);
+		endGame();
+	}
+	
+	public void escape() {
+		if (item == "medical supplies") {
+			position = "escape";
+			playerHP -= 10;
+			hpLabelNumber.setText("" + playerHP);
+			mainTextArea.setText("You were able to escape the bear with only a few scratches. The medical supplies you grabbed helped out significantly.\n"
+					+ "YOU SURVIVED!");
+			choice1.setText("");
+			choice2.setText("");
+			choice3.setText("");
+			choice4.setText("");
+			choice1.setVisible(false);
+			choice2.setVisible(false);
+			choice3.setVisible(false);
+			choice4.setVisible(false);
+			endGame();
+		} else if (item == "food and water") {
+			position = "escape";
+			playerHP -= 10;
+			hpLabelNumber.setText("" + playerHP);
+			mainTextArea.setText("You attempt to escape but the bear could smell the food that you grabbed and escape was not possible. You did not make it.\n"
+					+ "GAME OVER");
+			choice1.setText("");
+			choice2.setText("");
+			choice3.setText("");
+			choice4.setText("");
+			choice1.setVisible(false);
+			choice2.setVisible(false);
+			choice3.setVisible(false);
+			choice4.setVisible(false);
+			endGame();
+		}
+	}
+	
+	public void endGame() {
+		new Game();
 	}
 	
 	public class TitleScreenHandler implements ActionListener {
@@ -259,6 +451,69 @@ public class Game {
 					path();
 					break;
 				}
+				break;
+			case "plane":
+				switch (choice) {
+				case "c1":
+					item = "medical supplies";
+					river();
+					break;
+				case "c2":
+					item = "medical supplies";
+					path();
+					break;
+				case "c3":
+					item = "food and water";
+					river();
+					break;
+				case "c4":
+					item = "food and water";
+					path();
+					break;
+				}
+				break;
+			case "river":
+				if (item == "medical supplies") {
+					switch (choice) {
+					case "c1":
+						raft();
+						break;
+					case "c2":
+						fire();
+						break;
+					}
+				} else if (item == "food and water") {
+					switch (choice) {
+					case "c1":
+						raft();
+						break;
+					case "c2":
+						fire();
+						break;
+					}
+				}
+				break;
+			case "path":
+				if (item == "medical supplies") {
+					switch (choice) {
+					case "c1":
+						escape();
+						break;
+					case "c2":
+						fight();
+						break;
+					}
+				} else if (item == "food and water") {
+					switch (choice) {
+					case "c1":
+						throwFood();
+						break;
+					case "c2":
+						escape();
+						break;
+					}
+				}
+				break;
 			}
 		}
 		
